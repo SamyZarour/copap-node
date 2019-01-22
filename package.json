@@ -1,0 +1,50 @@
+{
+  "name": "copap-node",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "NODE_ENV=production node ./bin/www",
+    "dev": "NODE_ENV=dev nodemon ./bin/www",
+    "test": "NODE_ENV=test mocha --recursive -b --timeout 10000 --exit",
+    "lint:js": "eslint --ignore-path .gitignore .",
+    "lint:staged": "lint-staged"
+  },
+  "lint-staged": {
+    "*.js": "npm run lint:js"
+  },
+  "pre-commit": [
+    "lint:staged",
+    "test"
+  ],
+  "dependencies": {
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "errorhandler": "^1.5.0",
+    "express": "~4.16.0",
+    "express-jwt": "^5.3.1",
+    "http-errors": "~1.6.2",
+    "jade": "~1.11.0",
+    "jsonwebtoken": "^8.2.0",
+    "mongoose": "^5.0.11",
+    "mongoose-unique-validator": "^2.0.0",
+    "morgan": "~1.9.0",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "slug": "^0.9.1",
+    "swagger-ui-express": "^4.0.0",
+    "yamljs": "^0.3.0"
+  },
+  "devDependencies": {
+    "any-observable": "^0.3.0",
+    "chai": "^4.1.2",
+    "chai-http": "^4.0.0",
+    "dotenv": "^6.0.0",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^13.0.0",
+    "eslint-plugin-import": "^2.13.0",
+    "husky": "^0.14.3",
+    "lint-staged": "^7.2.0",
+    "mocha": "^5.2.0",
+    "pre-commit": "^1.2.2"
+  }
+}

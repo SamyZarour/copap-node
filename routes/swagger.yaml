@@ -1,0 +1,452 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  description: This is the server side of a reusable Auth app.
+  title: Rankr
+  contact:
+    name: Samy Zarour
+    email: zarour.samy@gmail.com
+    url: http://samy.xyz
+servers:
+  - url: http://localhost:3003/api
+tags:
+- name: user
+  description: User accounts
+paths:
+  /users:
+    post:
+      tags:
+      - user
+      summary: Add a new user
+      description: Returns the successfully added user
+      operationId: addUser
+      requestBody:
+        description: User that needs to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'User Created'
+                  user:
+                    $ref: '#/components/schemas/UserAuth'
+        422:
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error422'
+        500:
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+  /users/{username}:
+    get:
+      tags:
+      - user
+      summary: Find user
+      description: Returns a user
+      operationId: getUser
+      parameters:
+      - name: username
+        in: path
+        description: the username of the user account
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'User Profile'
+                  user:
+                    $ref: '#/components/schemas/User'
+        404:
+          description: Not Found Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+        500:
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+    put:
+      tags:
+      - user
+      summary: Update an existing user
+      description: Returns the successfully edited user
+      operationId: updateUser
+      parameters:
+      - name: username
+        in: path
+        description: the username of the user account
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: User that needs to be edited
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+      security:
+        - jwtAuth: []
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'User Updated'
+                  user:
+                    $ref: '#/components/schemas/User'
+        401:
+          description: Authentication Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        403:
+          description: Authorization Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        404:
+          description: Ressource Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+        422:
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error422'
+        500:
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+    delete:
+      tags:
+      - user
+      summary: Delete an existing user
+      operationId: deleteUser
+      parameters:
+      - name: username
+        in: path
+        description: the username of the user account
+        required: true
+        schema:
+          type: string
+      security:
+        - jwtAuth: []
+      responses:
+        204:
+          description: Success
+        401:
+          description: Authentication Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        403:
+          description: Authorization Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        404:
+          description: Ressource Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+        500:
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+  /users/login:
+    post:
+      tags:
+      - user
+      summary: Login user
+      description: Returns the successfully logged in user
+      operationId: loginUser
+      requestBody:
+        description: User that needs to be logged in
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'User Login'
+                  user:
+                    $ref: '#/components/schemas/UserAuth'
+        422:
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error422'
+        500:
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+  /users/current-user:
+    get:
+      tags:
+      - user
+      summary: Get current user
+      description: Returns the current User
+      operationId: getCurrentUser
+      security:
+        - jwtAuth: []
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'User Profile'
+                  user:
+                    $ref: '#/components/schemas/User'
+        401:
+          description: Authentication Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        403:
+          description: Authorization Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        404:
+          description: Ressource Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+        500:
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+components:
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    User:
+      type: object
+      required:
+      - username
+      properties:
+        username:
+          type: string
+          example: user
+        bio:
+          type: string
+          example: Someone who can't make up their mind on what movies are the best and in what order.
+    UserAuth:
+      type: object
+      required:
+      - username
+      properties:
+        username:
+          type: string
+          example: user
+        email:
+          type: string
+          example: user@mail.com
+        token:
+          type: string
+          example: 1476f4cfa96f20af2ca8cfdf9c5920f54d78f1b835318d729ceec2a72403cc29
+    UserLogin:
+      type: object
+      required:
+      - email
+      - password
+      properties:
+        email:
+          type: string
+          example: user@mail.com
+        password:
+          type: string
+          example: password
+    UserCreate:
+      type: object
+      required:
+      - username
+      - email
+      - password
+      properties:
+        username:
+          type: string
+          example: user
+        email:
+          type: string
+          example: user@mail.com
+        bio:
+          type: string
+          example: Someone who can't make up their mind on what movies are the best and in what order.
+        password:
+          type: string
+          example: password
+    Error401:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          example: 401
+        message:
+          type: string
+          example: 'authentication : not authenticated'
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              authentication:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'not autnenticated'
+    Error403:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          example: 403
+        message:
+          type: string
+          example: 'authorization : not authorized'
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              authorization:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'not authorized'
+    Error404:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          example: 404
+        message:
+          type: string
+          example: 'ressource : not found'
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              ressource:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'not found'
+    Error422:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          example: 422
+        message:
+          type: string
+          example: 'field : not valid or can not be blank'
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'not valid or can not be blank'
+    Error500:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          example: 422
+        message:
+          type: string
+          example: 'internal : undefined errors'
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              internal:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'undefined error'

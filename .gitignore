@@ -1,0 +1,21 @@
+# OS X
+.idea
+.DS_Store*
+Icon?
+._*
+
+# npm
+node_modules
+package-lock.json
+yarn.lock
+*.log
+*.gz
+
+# Coveralls
+coverage
+
+# Benchmarking
+benchmarks/graphs
+
+# env
+.env

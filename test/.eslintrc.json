@@ -1,0 +1,6 @@
+{
+  "rules": {
+    "handle-callback-err": "off",
+    "no-unused-expressions": "off"
+  }
+}
