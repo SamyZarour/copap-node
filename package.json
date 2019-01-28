@@ -13,8 +13,7 @@
     "*.js": "npm run lint:js"
   },
   "pre-commit": [
-    "lint:staged",
-    "test"
+    "lint:staged"
   ],
   "dependencies": {
     "cookie-parser": "~1.4.3",

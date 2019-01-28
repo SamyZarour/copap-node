@@ -43,10 +43,9 @@ UserSchema.methods.generateJWT = function() {
     }, secret);
 };
 
-UserSchema.methods.edit = function(username, email, bio) {
+UserSchema.methods.edit = function(username, email) {
     this.username = username || this.username;
     this.email = email || this.email;
-    this.bio = bio || this.bio;
     return this.save();
 };
 
@@ -61,14 +60,14 @@ UserSchema.methods.toAuthJSON = function() {
 UserSchema.methods.toProfileJSON = function() {
     return {
         username: this.username,
-        bio: this.bio
+        role: this.role
     };
 };
 
 UserSchema.methods.toJSON = function() {
     return {
         username: this.username,
-        bio: this.bio
+        role: this.role
     };
 };
 

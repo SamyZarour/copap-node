@@ -29,16 +29,24 @@ router.get('/current-user', auth.required, (req, res, next) => {
 });
 
 // Create user
-router.post('/', (req, res, next) => {
-    if(!req.body.password) { throw errorFactory.requiredFieldError.getError(['password']); }
-    if(!req.body.password.match(/^[A-Za-z0-9!@#$%^&*\d]{8,32}$/)) { throw errorFactory.validationError.getError(['password']); }
+router.post('/', auth.required, (req, res, next) => {
+    User.findById(req.payload.id)
+        .then(user => {
+            if(!user) { throw errorFactory.authenticationError.getError(); }
+            if(user.role !== 'admin') { throw errorFactory.authorizationError.getError(); }
 
-    const user = new User();
-    user.username = req.body.username;
-    user.email = req.body.email;
-    user.setPassword(req.body.password);
+            let { username, email, password } = req.body;
 
-    user.save()
+            if(!password) { throw errorFactory.requiredFieldError.getError(['password']); }
+            if(!password.match(/^[A-Za-z0-9!@#$%^&*\d]{8,32}$/)) { throw errorFactory.validationError.getError(['password']); }
+
+            const newUser = new User();
+            newUser.username = username;
+            newUser.email = email;
+            newUser.setPassword(password);
+
+            return newUser.save();
+        })
         .then(user => res.json({
             message: 'User Created',
             user: user.toAuthJSON()
@@ -67,8 +75,8 @@ router.put('/:user', auth.required, (req, res, next) => {
         .then(user => {
             if(!user) { throw errorFactory.authenticationError.getError(); }
             if(user.role !== 'admin' && !user._id.equals(req.user._id)) { throw errorFactory.authorizationError.getError(); }
-            let { username, email, bio } = req.body;
-            return req.user.edit(username, email, bio);
+            let { username, email } = req.body;
+            return req.user.edit(username, email);
         })
         .then(user => {
             return res.json({
