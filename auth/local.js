@@ -10,12 +10,12 @@ const User = mongoose.model('User');
 
 // Login
 passport.use('local-login', new LocalStrategy({
-    usernameField: 'email',
+    usernameField: 'username',
     passwordField: 'password'
-}, (email, password, done) => {
-    User.findOne({ email })
+}, (username, password, done) => {
+    User.findOne({ username })
         .then(user => {
-            if(!user) { return done(errorFactory.validationError.getError(['email'])); }
+            if(!user) { return done(errorFactory.validationError.getError(['username'])); }
             else if(!user.validPassword(password)) { return done(errorFactory.validationError.getError(['password'])); }
             user.token = user.generateJWT();
             return done(null, user);

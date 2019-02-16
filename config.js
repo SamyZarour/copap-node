@@ -8,7 +8,8 @@ const env = process.env.NODE_ENV;
 const dev = {
     port: process.env.DEV_PORT || '3000',
     db: {
-        url: process.env.DEV_DB_URL || 'mongodb://localhost/auth-dev'
+        url: process.env.DEV_DB_URL || 'mongodb://localhost/auth-dev',
+        copap: process.env.DEV_DB_COPAP || 'https://fcade28f.ngrok.io'
     },
     secret: process.env.DEV_SECRET || 'secret'
 };
@@ -17,7 +18,8 @@ const dev = {
 const test = {
     port: process.env.TEST_PORT || '3001',
     db: {
-        url: process.env.TEST_DB_URL || 'mongodb://localhost/auth-test'
+        url: process.env.TEST_DB_URL || 'mongodb://localhost/auth-test',
+        copap: process.env.DEV_DB_COPAP || 'https://4ad9b167.ngrok.io'
     },
     secret: process.env.TEST_SECRET || 'secret'
 };
@@ -26,7 +28,8 @@ const test = {
 const production = {
     port: process.env.PORT,
     db: {
-        url: process.env.DB_URL
+        url: process.env.DB_URL,
+        copap: process.env.DEV_DB_COPAP || 'https://4ad9b167.ngrok.io'
     },
     secret: process.env.SECRET
 };

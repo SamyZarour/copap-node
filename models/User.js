@@ -6,7 +6,7 @@ const mongoose = require('mongoose'),
 
 const UserSchema = new mongoose.Schema({
     username: { type: String, lowercase: true, unique: true, required: [true, 'can not be blank'], match: [/^[a-zA-Z0-9_-]+$/, 'not valid'], index: true },
-    email: { type: String, lowercase: true, unique: true, required: [true, 'can not be blank'], match: [/\S+@\S+\.\S+/, 'not valid'], index: true },
+    email: { type: String, lowercase: true, unique: true, match: [/\S+@\S+\.\S+/, 'not valid'], index: true },
     role: { type: String, enum: ['user', 'admin'], default: 'user' },
     hash: String,
     salt: String
@@ -38,7 +38,7 @@ UserSchema.methods.generateJWT = function() {
 
     return jwt.sign({
         id: this._id,
-        email: this.email,
+        username: this.username,
         exp: exp.getTime() / 1000
     }, secret);
 };
@@ -54,13 +54,6 @@ UserSchema.methods.toAuthJSON = function() {
         username: this.username,
         email: this.email,
         token: this.generateJWT()
-    };
-};
-
-UserSchema.methods.toProfileJSON = function() {
-    return {
-        username: this.username,
-        role: this.role
     };
 };
 
