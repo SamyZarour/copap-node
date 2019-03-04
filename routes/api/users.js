@@ -39,7 +39,6 @@ router.post('/', auth.required, (req, res, next) => {
             let { username, email, password } = req.body;
 
             if(!password) { throw errorFactory.requiredFieldError.getError(['password']); }
-            if(!password.match(/^[A-Za-z0-9!@#$%^&*\d]{8,32}$/)) { throw errorFactory.validationError.getError(['password']); }
 
             const newUser = new User();
             newUser.username = username;
