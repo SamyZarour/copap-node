@@ -5,8 +5,8 @@ const mongoose = require('mongoose'),
     secret = require('../config').secret;
 
 const UserSchema = new mongoose.Schema({
-    username: { type: String, lowercase: true, unique: true, required: [true, 'can not be blank'], match: [/^[a-zA-Z0-9_-]+$/, 'not valid'], index: true },
-    email: { type: String, lowercase: true, unique: true, match: [/\S+@\S+\.\S+/, 'not valid'], index: true },
+    username: { type: String, lowercase: true, unique: true, required: [true, 'can not be blank'], index: true },
+    email: { type: String, lowercase: true, unique: true, index: true },
     role: { type: String, enum: ['user', 'admin'], default: 'user' },
     hash: String,
     salt: String
