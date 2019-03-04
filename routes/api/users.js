@@ -105,7 +105,7 @@ router.post('/login', (req, res, next) => {
             getUser(username, password)
                 .then(result => {
                     const user = result.data && result.data.recordset && result.data.recordset.length === 1 && result.data.recordset[0];
-                    console.log(user);
+                    console.log(result);
                     if(user) { return Promise.all([user, User.findOne({ username })]); }
                     throw err;
                 })
