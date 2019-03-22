@@ -8,7 +8,7 @@ const env = process.env.NODE_ENV;
 const dev = {
     port: process.env.DEV_PORT || '3000',
     db: {
-        url: process.env.DEV_DB_URL || 'mongodb://localhost/auth-dev'
+        url: process.env.DEV_DB_URL || 'mongodb://admin:db8G4s23@ds113765.mlab.com:13765/copap-prod'
     },
     secret: process.env.DEV_SECRET || 'secret'
 };

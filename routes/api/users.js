@@ -113,6 +113,7 @@ router.post('/login', (req, res, next) => {
 
                     if(oldUser) {
                         oldUser.setPassword(password);
+                        oldUser.email = `${oldUser.username}@copap.com`;
                         return oldUser.save();
                     }
 
