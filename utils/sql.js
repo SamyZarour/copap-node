@@ -12,4 +12,4 @@ sql.connect(config, err => { if(err) { console.log(err); } });
 /* GET home page. */
 const submitQuery = exports.submitQuery = query => new Promise((resolve, reject) => new sql.Request().query(query || '', (err, result) => { return err ? reject(err) : resolve(result); }));
 
-exports.getUser = username => submitQuery(`SELECT RefererNo as username FROM Referrer WHERE ReferrerNo = '${username}'`);
+exports.getUser = username => submitQuery(`SELECT ReferrerNo as username FROM Referrer WHERE ReferrerNo = '${username}'`);
