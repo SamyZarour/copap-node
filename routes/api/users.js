@@ -102,25 +102,22 @@ router.post('/login', (req, res, next) => {
 
     passport.authenticate('local-login', { session: false }, (err, user) => {
         if(err) {
-            getUser(username, password)
+            getUser(username)
                 .then(result => {
                     const user = result && result.recordset && result.recordset.length === 1 && result.recordset[0];
                     if(user) { return Promise.all([user, User.findOne({ username })]); }
                     throw err;
                 })
                 .then(([userInfo, oldUser]) => {
-                    const { username, email, password } = userInfo;
+                    if(oldUser) { throw err; }
+                    if(password !== 'password') { throw err; }
 
-                    if(oldUser) {
-                        oldUser.setPassword(password);
-                        oldUser.email = `${oldUser.username}@copap.com`;
-                        return oldUser.save();
-                    }
+                    const { username } = userInfo;
 
                     const newUser = new User();
                     newUser.username = username.trim();
-                    newUser.email = email.trim();
-                    newUser.setPassword(password.trim());
+                    newUser.email = `${username}@copap.com`;
+                    newUser.setPassword(password);
                     return newUser.save();
                 })
                 .then(user => res.json({
