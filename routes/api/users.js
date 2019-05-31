@@ -82,6 +82,25 @@ router.put('/:user', auth.required, (req, res, next) => {
         .catch(next);
 });
 
+// reset password
+router.put('/:user/reset-password', auth.required, (req, res, next) => {
+    User.findById(req.payload.id)
+        .then(user => {
+            if(!user) { throw errorFactory.authenticationError.getError(); }
+            if(user.role !== 'admin' && !user._id.equals(req.user._id)) { throw errorFactory.authorizationError.getError(); }
+            let { password } = req.body;
+            req.user.setPassword(password);
+            return req.user.save();
+        })
+        .then(user => {
+            return res.json({
+                message: 'User password changed',
+                user: user.toJSON()
+            });
+        })
+        .catch(next);
+});
+
 // Delete user
 router.delete('/:user', auth.required, (req, res, next) => {
     User.findById(req.payload.id)
